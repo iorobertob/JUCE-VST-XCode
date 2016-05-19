@@ -24,8 +24,8 @@ class TruePan_0_01AudioProcessor  : public AudioProcessor
 //TruePan_0_01AudioProcessor = MainComponent in JUCE documentation
 public:
     ///////// I / O Patterns ///////////////////////////////////////////////////////
-    int delayL;
-    int delayR;
+    int delayL = 0;
+    int delayR = 0;
     int ndelay = 0;
     //float sliderValue;
     float numInputs;

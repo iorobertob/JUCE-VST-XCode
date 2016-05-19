@@ -131,18 +131,36 @@ void TruePan_0_01AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
         
         int delaySampleL = 0;
         int delaySampleR = 0;
+        
 
         while (n < buffer.getNumSamples())
         {
             
             int ndelay1 = (int)ndelay;
             
-            delaySampleL = delaySamplesPtr[0];
-            delaySampleR = delaySamplesPtr[1];
+            //delaySampleL = delaySamplesPtr[0];
+            //delaySampleR = delaySamplesPtr[1];
             
-            delayR = ndelay + delaySamplesPtr[1];
+            //delaySamples[0] = delaySamplesPtr[0];
+            //delaySamples[1] = delaySamplesPtr[1];
+            
+            //delayR = ndelay + *(delaySamplesPtr + 1);
+            //si no intenta tambien
+            //ndelay + *((*delaySamplesPtr) + 1);
+            //delayR = 0;
+            //delayR = ndelay + delaySampleL;
+            //delayR = ndelay + delaySamplesPtr[0];
             //delayL = ndelay + delaySamplesPtr[0];
-            //
+            //delayL = ndelay + *delaySamplesPtr;
+            //delayR = delayL;
+            
+            delayL = ndelay + delaySamples[0];
+            //delayR = ndelay + delaySamples[1];
+            delayR = ndelay + delaySamples[1];
+            //delayL = delaySamples[0];
+            //delayR = delaySamples[1];
+            
+            
             //delayL = ndelay + delaySampleL;
             //delayR = ndelay + delaySampleR;
             //delayL = ndelay + 0;
@@ -151,6 +169,12 @@ void TruePan_0_01AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
             
             bufferDelayL[delayL] = samples1[n];
             bufferDelayR[delayR] = samples0[n];
+           
+            printf("delaySamplesPtr = %d\n", delaySamplesPtr[1]);
+            
+            //if (delayL)
+            //printf ("delayL 2: %d \n", delayL);
+            //printf ("delayR 3: %d \n", delayR);
             
             // Somewhere here it will overflow if delaySamplesPtr[] is larger than bufferDelayL.size or R
             if (delayL > 1023)//Buffer size. TODO: abstract.
@@ -161,22 +185,6 @@ void TruePan_0_01AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
             {
                 delayR -= 1024;
             }
-            
-            printf("Inside condition start/////////// \n");
-                
-                printf ("delaySamplesPtr 0: %d \n", delaySamplesPtr[0]);
-                printf ("delaySamplesPtr 1: %d \n", delaySamplesPtr[1]);
-                printf ("delaySamplesPtr 0: %f \n", delaySamplesPtr[0]);
-                printf ("delaySamplesPtr 1: %f \n", delaySamplesPtr[1]);
-            
-                printf ("delayL 2: %d \n", delayL);
-                printf ("delayR 3: %d \n", delayR);
-            
-                printf ("ndelay 4: %d \n", ndelay);
-                printf ("n 5: %d \n", n);
-                printf ("buffer.getNumSamples 6: %d \n", buffer.getNumSamples());
-                printf("Inside condition stop/////////// \n");
-            
             
              if ((ndelay > 1023)||(ndelay < 0))//bufferDelayL.size())
             {
@@ -203,7 +211,7 @@ void TruePan_0_01AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBu
             samples1[n] = bufferDelayL[ndelay1];
             samples0[n] = bufferDelayR[ndelay1];
             
-            ndelay++;
+            ++ndelay;
             if (ndelay > 1023)//bufferDelayL.size())
             {
                 

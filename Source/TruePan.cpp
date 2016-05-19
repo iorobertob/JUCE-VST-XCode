@@ -70,8 +70,10 @@ int *TruePan::ComputeDelay(float pos, float SR)
     nSamples[0] = (int)(SR * (d1/343));
     nSamples[1] = (int)(SR * (d2/343));
     
-    printf("nsamples 0 %d /n", nSamples[0]);
-    printf("nsamples 1 %d /n", nSamples[0]);
+    
+    printf("start ////////////////// \n");
+    printf("nsamples 0 %d \n", nSamples[0]);
+    printf("nsamples 1 %d \n", nSamples[1]);
     //printf("nsamples 0 %f /n", nSamples[0]);
     //printf("nsamples 1 %f /n", nSamples[0]);
     
@@ -88,6 +90,8 @@ int *TruePan::ComputeDelay(float pos, float SR)
     }
     
     //pointer = nSamples;
-    
+    printf("nsamples 0 %d \n", nSamples[0]);
+    printf("nsamples 1 %d \n", nSamples[1]);
+    printf("end ////////////////// \n");
     return nSamples;
 }
