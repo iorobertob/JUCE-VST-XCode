@@ -15,6 +15,7 @@
 
 #include <array>
 
+
 //==============================================================================
 /**
 */
@@ -24,25 +25,36 @@ class TruePan_0_01AudioProcessor  : public AudioProcessor
 //TruePan_0_01AudioProcessor = MainComponent in JUCE documentation
 public:
     ///////// I / O Patterns ///////////////////////////////////////////////////////
-    int delayL = 0;
-    int delayR = 0;
-    int ndelay = 0;
-    //float sliderValue;
-    float numInputs;
-    //float nSamplesDelay;
-    int delaySamples[2] = {};
-    int* delaySamplesPtr = delaySamples;
-    //std::array<float,1024> bufferDelayL = {};//Initialise to 0
-    //std::array<float,1024> bufferDelayR = {};
-    float bufferDelayL[1024] = {0};
-    float bufferDelayR[1024] = {0};
     
-    //float bufferDelayR[1024];
+    
+    // Positions and new delay to address a buffer
+    int positionInCurrentBuffer[2]  = {0}; 
+    int currentDelayInSamples       = 0; 
+    int pastDelayInSamples[2]       = {0};   
+    
+    // To Store values and create interpolations 
+    // TODO: see if can be merged into one single buffer
+    float prevInput[2]              = {0};
+    float prevInputs[2][5]          = {0};
+     
+    // Used to compute delay in samples from the know position using TruePan class
+    // TODO: make without pointer?
+    int  delaySamplesKnobPos[2]     = {0};
+    int* delaySamplesKnobPosPtr     = delaySamplesKnobPos;
+    
+    // This is where the input samples are put
+    float* samples;
+    
+    // The circular buffer for the delayed data
+    float* delayedData;
+    
+    // Placeholder for Sample Rate 
     float mSampleRate;
     ///////// I / O Patterns ///////////////////////////////////////////////////////
+    
     //==============================================================================
-    TruePan_0_01AudioProcessor(); // MainComponent()
-    ~TruePan_0_01AudioProcessor();
+    TruePan_0_01AudioProcessor(); // MainComponent() - Constructor
+    ~TruePan_0_01AudioProcessor();// Destructor
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -90,11 +102,14 @@ private:
     bool NeedsUIUpdate(){return UIUpdateFlag;};
     void RequestUIUpdate(){UIUpdateFlag=true;};
     void ClearUIUpdateFlag(){UIUpdateFlag=false;};
-    private:
+    //private:
     //Private Data, helper methods etc.
     float UserParams[totalNumParam];
     
     bool UIUpdateFlag; 
+    
+    // Taken from Audio Effects- Reiss
+    AudioSampleBuffer delayBuffer_;
     
 };
 

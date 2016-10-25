@@ -41,23 +41,21 @@ void TruePan::ClockProcess(float* LeftSample, float* RightSample)
 }
 
 
-int *TruePan::ComputeDelay(float pos, float SR)
+void TruePan::ComputeDelay(float pos, float SR)
 {
     // Convert to radians.
-    pos = ((pos+270) * 2 * M_PI) / (360);
-     
-    float* pointer;//TODO: Abstract
+    pos = (((pos/256)*180)-180)/180*M_PI;
     
     //TODO:These values must be defined prior to this. Only for test defined here
-    float radious = 1.0;//TODO: Abstract
+    float radious = 1.0;//TODO: Abstract if necessary
     
-    float xs = cos(pos) * radious;//TODO: Abstract
+    float xs = cos(pos) * radious;//TODO: Abstract if necessary
     float ys = -sin(pos) * radious;
     
     // 1 = LEFT
     // 2 = RIGHT
     //TODO: This following position must be defined and set prior and in relation to a 'distance between speakers'
-    float x1 = -0.5;//TODO: Abstract
+    float x1 = -0.5;//TODO: Abstract if necessary
     float x2 = 0.5;
     float y1 = 0.0;
     float y2 = y1;
@@ -66,16 +64,9 @@ int *TruePan::ComputeDelay(float pos, float SR)
     float d1 = sqrt(pow(xs-x1,2)+pow(ys-y1,2));//TODO: Abstract
     float d2 = sqrt(pow(xs-x2,2)+pow(ys-y2,2));
     
-    // number of samples to delay 
-    nSamples[0] = (int)(SR * (d1/343));
-    nSamples[1] = (int)(SR * (d2/343));
-    
-    
-    printf("start ////////////////// \n");
-    printf("nsamples 0 %d \n", nSamples[0]);
-    printf("nsamples 1 %d \n", nSamples[1]);
-    //printf("nsamples 0 %f /n", nSamples[0]);
-    //printf("nsamples 1 %f /n", nSamples[0]);
+    // Number of samples to delay 
+    nSamples[0] = (int)(SR * (d1/343));  // LEFT
+    nSamples[1] = (int)(SR * (d2/343));  // RIGHT
     
     // Only use as much delay as there is inbetween channels. 
     if(nSamples[0] >= nSamples[1])
@@ -90,8 +81,7 @@ int *TruePan::ComputeDelay(float pos, float SR)
     }
     
     //pointer = nSamples;
+    printf("position %f \n", pos);
     printf("nsamples 0 %d \n", nSamples[0]);
     printf("nsamples 1 %d \n", nSamples[1]);
-    printf("end ////////////////// \n");
-    return nSamples;
 }

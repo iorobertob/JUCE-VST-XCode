@@ -9,7 +9,7 @@
               pluginIsMidiEffectPlugin="0" pluginSilenceInIsSilenceOut="0"
               pluginEditorRequiresKeys="0" pluginAUExportPrefix="TruePan_0_01AU"
               pluginRTASCategory="" aaxIdentifier="com.yourcompany.TruePan_0_01"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.1"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.4"
               companyName="IO Patterns" companyWebsite="iopatterns.com" companyEmail="info@patterns.com"
               buildAUv3="0">
   <MAINGROUP id="OfvDdC" name="TruePan_0_01">
@@ -24,15 +24,17 @@
       <FILE id="T5jXkk" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="RM5LT4" name="PluginEditor.h" compile="1" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="dJqJ5y" name="AltLookAndFeel.h" compile="0" resource="0"
+            file="Source/AltLookAndFeel.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" postbuildCommand="" vstFolder=""
                vst3Folder="/SDKs/VST3 SDK" extraDefs="&#10;">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="64BitIntel"
                        isDebug="1" optimisation="3" targetName="TruePan_0_01" headerPath="..\..\Source\TruePanPlugin;"/>
-        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="64BitIntel"
                        isDebug="0" optimisation="3" targetName="TruePan_0_01" headerPath="..\..\Source\TruePanPlugin;"/>
       </CONFIGURATIONS>
       <MODULEPATHS>

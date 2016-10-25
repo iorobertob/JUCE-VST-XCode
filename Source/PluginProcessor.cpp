@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+ 
 
 #include <iomanip>
 #include <locale>
@@ -25,7 +26,6 @@ TruePan_0_01AudioProcessor::TruePan_0_01AudioProcessor()
 {
     ///////  I/O   ///////////
     UserParams[Gain] = 0.0;
-    
     ///////  I/O   ///////////
 }
 
@@ -100,127 +100,134 @@ void TruePan_0_01AudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     // initialisation that you need..
     mSampleRate = getSampleRate();
     
+    // Based on Audio Effects - Reiss
+    delayBuffer_.setSize(2, 1024);
+    delayBuffer_.clear ();
+    
 }
 
 void TruePan_0_01AudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+    // spare memory, etc. 
 }
+
 
 void TruePan_0_01AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
 
     
-    for(int i = getNumInputChannels(); i < getNumOutputChannels(); i++){
+    //for(int i = getNumInputChannels(); i < getNumOutputChannels();  i++){
         
         //buffer.clear(i, 0, buffer.getNumSamples()); // causing noise!!!!!!!!!!!!!!!!!!
-        
-    }
+         
+    //}
     
-    int numberOfChannels =  getNumInputChannels();
-    
+    const int numberOfChannels =  getTotalNumInputChannels();
     
     if (numberOfChannels == 2)
     {
-        // samples0 = Right, samples1 = Left
-        float* samples0 = buffer.getWritePointer(0);
-        float* samples1 = buffer.getWritePointer(1);
         
-        int n = 0;
-        
-        int delaySampleL = 0;
-        int delaySampleR = 0;
-        
-
-        while (n < buffer.getNumSamples())
+        for (int channel = 0; channel < getTotalNumInputChannels(); ++channel)
         {
+            samples = buffer.getWritePointer(channel);
             
-            int ndelay1 = (int)ndelay;
+            // delayData is the circular buffer for implementing the delay
+            delayedData = delayBuffer_.getWritePointer(
+                                jmin( channel, 
+                                delayBuffer_.getNumChannels() - 1));
             
-            //delaySampleL = delaySamplesPtr[0];
-            //delaySampleR = delaySamplesPtr[1];
-            
-            //delaySamples[0] = delaySamplesPtr[0];
-            //delaySamples[1] = delaySamplesPtr[1];
-            
-            //delayR = ndelay + *(delaySamplesPtr + 1);
-            //si no intenta tambien
-            //ndelay + *((*delaySamplesPtr) + 1);
-            //delayR = 0;
-            //delayR = ndelay + delaySampleL;
-            //delayR = ndelay + delaySamplesPtr[0];
-            //delayL = ndelay + delaySamplesPtr[0];
-            //delayL = ndelay + *delaySamplesPtr;
-            //delayR = delayL;
-            
-            delayL = ndelay + delaySamples[0];
-            //delayR = ndelay + delaySamples[1];
-            delayR = ndelay + delaySamples[1];
-            //delayL = delaySamples[0];
-            //delayR = delaySamples[1];
-            
-            
-            //delayL = ndelay + delaySampleL;
-            //delayR = ndelay + delaySampleR;
-            //delayL = ndelay + 0;
-            //delayR = ndelay + 0;
-            
-            
-            bufferDelayL[delayL] = samples1[n];
-            bufferDelayR[delayR] = samples0[n];
-           
-            printf("delaySamplesPtr = %d\n", delaySamplesPtr[1]);
-            
-            //if (delayL)
-            //printf ("delayL 2: %d \n", delayL);
-            //printf ("delayR 3: %d \n", delayR);
-            
-            // Somewhere here it will overflow if delaySamplesPtr[] is larger than bufferDelayL.size or R
-            if (delayL > 1023)//Buffer size. TODO: abstract.
+                                
+            for (int i = 0; i < buffer.getNumSamples(); ++i)
             {
-                delayL -= 1024;
-            }
-            if (delayR > 1023)
-            {
-                delayR -= 1024;
-            }
-            
-             if ((ndelay > 1023)||(ndelay < 0))//bufferDelayL.size())
-            {
-                printf("Inside condition START/////////// \n");
+                // position in the delay buffer, where to store: current position in buffer + current delay in samples
+                currentDelayInSamples = positionInCurrentBuffer[channel] + pastDelayInSamples[channel];
+                if (currentDelayInSamples >  1023)
+                {   // reset off limits
+                    currentDelayInSamples -= 1024;
+                }
                 
-                printf ("delaySamplesPtr 0: %d \n", delaySamplesPtr[0]);
-                printf ("delaySamplesPtr 1: %d \n", delaySamplesPtr[1]);
-                printf ("delaySamplesPtr 0: %f \n", delaySamplesPtr[0]);
-                printf ("delaySamplesPtr 1: %f \n", delaySamplesPtr[1]);
-            
-                printf ("delayL 2: %d \n", delayL);
-                printf ("delayR 3: %d \n", delayR);
-            
-                printf ("ndelay 4: %d \n", ndelay);
-                printf ("n 5: %d \n", n);
-                printf ("buffer.getNumSamples 6: %d \n", buffer.getNumSamples());
-                printf("Inside condition STOP/////////// \n");
-                ndelay = 0;
+                // Delay is increasing - Interpolation
+                // Only every 100 samples, not to have all artifacts concentrated
+                if ((delaySamplesKnobPos[channel] > pastDelayInSamples[channel]) && (i%100 == 0)){
+                    
+                    prevInput[channel] = (samples[i]+prevInputs[channel][4])/2;
+                    // INPUT
+                    // one position more since the delay is getting longer, one sample at the time
+                    if ((currentDelayInSamples + 1) > 1023){
+                        
+                        delayedData[0] = samples [i]; // y4
+                        
+                    }
+                    else{
+                        delayedData[currentDelayInSamples + 1]= samples [i]; // y4
+                    }
+                    
+                    // Lagrange Interpolation 
+                    // y3 = -0.25y0 - y1 + 1.5y2 + 0.25y4
+                    delayedData[currentDelayInSamples]        = (0.25*prevInputs[channel][2]) - (prevInputs[channel][3])
+                                                + (1.5*prevInputs[channel][4]) + (0.25*samples[i]);
+                    
+                    // Move towards delay goal. Make a line to smooth the transition
+                    pastDelayInSamples[channel]++;  
+                    
+                    // saving current input for next average. saving the previous 3 inputs 
+                    prevInputs[channel][0] = prevInputs[channel][1];// 
+                    prevInputs[channel][1] = prevInputs[channel][2];// 
+                    prevInputs[channel][2] = prevInputs[channel][3];// 
+                    prevInputs[channel][3] = delayedData[currentDelayInSamples];// 
+                    prevInputs[channel][4] = samples[i]; 
+                    
+                    
+                }
                 
+                // Delay is decreasing - Average
+                else if ((delaySamplesKnobPos[channel] < pastDelayInSamples[channel])&& (i%100 == 0)){
+                    
+                    // INPUT
+                    // we update one position shorter, since delay is getting shorter.
+                    delayedData[currentDelayInSamples-1]    = samples[i];
+                    
+                     // INPUT
+                    // The previous sample is modified to fit an interpolated curve
+                    delayedData[currentDelayInSamples-2]    = (0.25*prevInputs[channel][0]) - (prevInputs[channel][1])
+                                                + (1.5*prevInputs[channel][2]) + (0.25*samples[i]);
+                                                
+                    // move towards delay goal. 
+                    pastDelayInSamples[channel]--; 
+                    
+                    // saving current input for next average.
+                    prevInputs[channel][3] = delayedData[currentDelayInSamples-2] ;  
+                    prevInputs[channel][4] = samples[i];
+                    
+                }
+                
+                // Delay is the same
+                else{
+                    // INPUT
+                    // put current sample in the 'delay' position in the buffer
+                    delayedData[currentDelayInSamples]       = samples[i];
+                    
+                    // Save previous inputs for future interpolations
+                    prevInputs[channel][0] = prevInputs[channel][1];// 
+                    prevInputs[channel][1] = prevInputs[channel][2];// 
+                    prevInputs[channel][2] = prevInputs[channel][3];// 
+                    prevInputs[channel][3] = prevInputs[channel][4];// 
+                    prevInputs[channel][4] = samples[i];
+                }
+                
+                // OUTPUT, a position in the delayData buffer
+                samples[i]                = delayedData[positionInCurrentBuffer[channel]];
+                
+                // increase position in delay buffer for output, this only go around the buffer
+                positionInCurrentBuffer[channel]++;
+                if(positionInCurrentBuffer[channel] > 1023)
+                {   // reset off limits
+                    positionInCurrentBuffer[channel]= 0;
+                }
+            
             }
-            // Actual output
-            //*samples1++ = bufferDelayL[delayL];
-            //*samples0++ = bufferDelayR[delayR];
-            samples1[n] = bufferDelayL[ndelay1];
-            samples0[n] = bufferDelayR[ndelay1];
-            
-            ++ndelay;
-            if (ndelay > 1023)//bufferDelayL.size())
-            {
-                
-                ndelay = 0;
-                
-            }
-            
-            n++;
-            
+             
         }
         
     }

@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 4.2.1
+  Created with Projucer version: 4.2.4
 
   ------------------------------------------------------------------------------
 
@@ -26,6 +26,7 @@
 /////////////////
 /////  I/O  / ///
 #include "TruePan.h"
+#include "AltLookAndFeel.h"
 ////////////////
 //[/Headers]
 
@@ -50,30 +51,29 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void timerCallback();
+    void timerCallback()override;
     TruePan_0_01AudioProcessor* getProcessor() const
         {return static_cast <TruePan_0_01AudioProcessor*>(getAudioProcessor());}
+
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
-    // Binary resources:
-    static const char* _1_jpg;
-    static const int _1_jpgSize;
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     TruePan mTruePan;
+
+    AltLookAndFeel altLookAndFeel; // [2]
     //[/UserVariables]
 
     //==============================================================================
     ScopedPointer<Slider> slider;
     ScopedPointer<Label> label;
     ScopedPointer<Label> label2;
-    Image cachedImage__1_jpg_1;
 
 
     //==============================================================================
@@ -81,6 +81,7 @@ private:
 };
 
 //[EndFile] You can add extra defines here...
+
 //[/EndFile]
 
 #endif   // __JUCE_HEADER_ED2E81A60680C205__

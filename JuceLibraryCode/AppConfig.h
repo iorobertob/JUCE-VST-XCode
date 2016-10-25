@@ -111,6 +111,13 @@
 #endif
 
 //==============================================================================
+// juce_audio_plugin_client flags:
+
+#ifndef    JUCE_FORCE_USE_LEGACY_PARAM_IDS
+ //#define JUCE_FORCE_USE_LEGACY_PARAM_IDS
+#endif
+
+//==============================================================================
 // juce_audio_processors flags:
 
 #ifndef    JUCE_PLUGINHOST_VST
@@ -150,6 +157,14 @@
 
 #ifndef    JUCE_USE_CURL
  //#define JUCE_USE_CURL
+#endif
+
+#ifndef    JUCE_CATCH_UNHANDLED_EXCEPTIONS
+ //#define JUCE_CATCH_UNHANDLED_EXCEPTIONS
+#endif
+
+#ifndef    JUCE_ALLOW_STATIC_NULL_VARIABLES
+ //#define JUCE_ALLOW_STATIC_NULL_VARIABLES
 #endif
 
 //==============================================================================
@@ -253,10 +268,10 @@
  #define JucePlugin_ManufacturerEmail      "info@patterns.com"
 #endif
 #ifndef  JucePlugin_ManufacturerCode
- #define JucePlugin_ManufacturerCode       'TP01'
+ #define JucePlugin_ManufacturerCode       0x54503031 // 'TP01'
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             'TP01'
+ #define JucePlugin_PluginCode             0x54503031 // 'TP01'
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0
