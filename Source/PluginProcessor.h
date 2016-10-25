@@ -13,10 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-/////////////////
-/////  I/O  / ///
-#include "TruePan.h"
-////////////////
+#include <array>
+
 
 //==============================================================================
 /**
@@ -27,13 +25,36 @@ class TruePan_0_01AudioProcessor  : public AudioProcessor
 //TruePan_0_01AudioProcessor = MainComponent in JUCE documentation
 public:
     ///////// I / O Patterns ///////////////////////////////////////////////////////
-    float sliderValue;
-    float numInputs;
-    float w[513];
+    
+    
+    // Positions and new delay to address a buffer
+    int positionInCurrentBuffer[2]  = {0}; 
+    int currentDelayInSamples       = 0; 
+    int pastDelayInSamples[2]       = {0};   
+    
+    // To Store values and create interpolations 
+    // TODO: see if can be merged into one single buffer
+    float prevInput[2]              = {0};
+    float prevInputs[2][5]          = {0};
+     
+    // Used to compute delay in samples from the know position using TruePan class
+    // TODO: make without pointer?
+    int  delaySamplesKnobPos[2]     = {0};
+    int* delaySamplesKnobPosPtr     = delaySamplesKnobPos;
+    
+    // This is where the input samples are put
+    float* samples;
+    
+    // The circular buffer for the delayed data
+    float* delayedData;
+    
+    // Placeholder for Sample Rate 
+    float mSampleRate;
     ///////// I / O Patterns ///////////////////////////////////////////////////////
+    
     //==============================================================================
-    TruePan_0_01AudioProcessor(); // MainComponent()
-    ~TruePan_0_01AudioProcessor();
+    TruePan_0_01AudioProcessor(); // MainComponent() - Constructor
+    ~TruePan_0_01AudioProcessor();// Destructor
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -76,17 +97,19 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TruePan_0_01AudioProcessor)
     
-    
-    
+       
     
     bool NeedsUIUpdate(){return UIUpdateFlag;};
     void RequestUIUpdate(){UIUpdateFlag=true;};
     void ClearUIUpdateFlag(){UIUpdateFlag=false;};
-    private:
+    //private:
     //Private Data, helper methods etc.
     float UserParams[totalNumParam];
-    TruePan mWidthControl;
+    
     bool UIUpdateFlag; 
+    
+    // Taken from Audio Effects- Reiss
+    AudioSampleBuffer delayBuffer_;
     
 };
 

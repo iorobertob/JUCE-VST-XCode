@@ -11,6 +11,14 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+ 
+
+#include <iomanip>
+#include <locale>
+#include <sstream>
+#include <string> // this should be already included in <sstream>
 
 
 //==============================================================================
@@ -18,7 +26,6 @@ TruePan_0_01AudioProcessor::TruePan_0_01AudioProcessor()
 {
     ///////  I/O   ///////////
     UserParams[Gain] = 0.0;
-    
     ///////  I/O   ///////////
 }
 
@@ -70,6 +77,7 @@ int  TruePan_0_01AudioProcessor::getNumPrograms()
 int TruePan_0_01AudioProcessor::getCurrentProgram()
 {
     return 0;
+    
 }
 
 void TruePan_0_01AudioProcessor::setCurrentProgram (int index)
@@ -90,49 +98,142 @@ void TruePan_0_01AudioProcessor::prepareToPlay (double sampleRate, int samplesPe
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    mSampleRate = getSampleRate();
+    
+    // Based on Audio Effects - Reiss
+    delayBuffer_.setSize(2, 1024);
+    delayBuffer_.clear ();
     
 }
 
 void TruePan_0_01AudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+    // spare memory, etc. 
 }
+
 
 void TruePan_0_01AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
+
     
-    //numInputs = getNumInputChannels();
-    numInputs = buffer.getNumSamples();
-    
-    for(int i = getNumInputChannels(); i < getNumOutputChannels(); i++){
+    //for(int i = getNumInputChannels(); i < getNumOutputChannels();  i++){
         
         //buffer.clear(i, 0, buffer.getNumSamples()); // causing noise!!!!!!!!!!!!!!!!!!
-        
-    }
+         
+    //}
     
-    int numberOfChannels =  getNumInputChannels();    
+    const int numberOfChannels =  getTotalNumInputChannels();
     
-    if (numberOfChannels == 2){
+    if (numberOfChannels == 2)
+    {
         
-        // samples0 = Right, samples1 = Left
-        float* samples0 = buffer.getWritePointer(0);
-        float* samples1 = buffer.getWritePointer(1);        
-        
-        int numSamples = buffer.getNumSamples();
-        
-        while (numSamples > 0){
+        for (int channel = 0; channel < getTotalNumInputChannels(); ++channel)
+        {
+            samples = buffer.getWritePointer(channel);
             
-            // Simple Gain Control
-            *samples0++ *= sliderValue;
-            *samples1++ *= sliderValue;
-            numSamples--;
-                       
+            // delayData is the circular buffer for implementing the delay
+            delayedData = delayBuffer_.getWritePointer(
+                                jmin( channel, 
+                                delayBuffer_.getNumChannels() - 1));
+            
+                                
+            for (int i = 0; i < buffer.getNumSamples(); ++i)
+            {
+                // position in the delay buffer, where to store: current position in buffer + current delay in samples
+                currentDelayInSamples = positionInCurrentBuffer[channel] + pastDelayInSamples[channel];
+                if (currentDelayInSamples >  1023)
+                {   // reset off limits
+                    currentDelayInSamples -= 1024;
+                }
+                
+                // Delay is increasing - Interpolation
+                // Only every 100 samples, not to have all artifacts concentrated
+                if ((delaySamplesKnobPos[channel] > pastDelayInSamples[channel]) && (i%100 == 0)){
+                    
+                    prevInput[channel] = (samples[i]+prevInputs[channel][4])/2;
+                    // INPUT
+                    // one position more since the delay is getting longer, one sample at the time
+                    if ((currentDelayInSamples + 1) > 1023){
+                        
+                        delayedData[0] = samples [i]; // y4
+                        
+                    }
+                    else{
+                        delayedData[currentDelayInSamples + 1]= samples [i]; // y4
+                    }
+                    
+                    // Lagrange Interpolation 
+                    // y3 = -0.25y0 - y1 + 1.5y2 + 0.25y4
+                    delayedData[currentDelayInSamples]        = (0.25*prevInputs[channel][2]) - (prevInputs[channel][3])
+                                                + (1.5*prevInputs[channel][4]) + (0.25*samples[i]);
+                    
+                    // Move towards delay goal. Make a line to smooth the transition
+                    pastDelayInSamples[channel]++;  
+                    
+                    // saving current input for next average. saving the previous 3 inputs 
+                    prevInputs[channel][0] = prevInputs[channel][1];// 
+                    prevInputs[channel][1] = prevInputs[channel][2];// 
+                    prevInputs[channel][2] = prevInputs[channel][3];// 
+                    prevInputs[channel][3] = delayedData[currentDelayInSamples];// 
+                    prevInputs[channel][4] = samples[i]; 
+                    
+                    
+                }
+                
+                // Delay is decreasing - Average
+                else if ((delaySamplesKnobPos[channel] < pastDelayInSamples[channel])&& (i%100 == 0)){
+                    
+                    // INPUT
+                    // we update one position shorter, since delay is getting shorter.
+                    delayedData[currentDelayInSamples-1]    = samples[i];
+                    
+                     // INPUT
+                    // The previous sample is modified to fit an interpolated curve
+                    delayedData[currentDelayInSamples-2]    = (0.25*prevInputs[channel][0]) - (prevInputs[channel][1])
+                                                + (1.5*prevInputs[channel][2]) + (0.25*samples[i]);
+                                                
+                    // move towards delay goal. 
+                    pastDelayInSamples[channel]--; 
+                    
+                    // saving current input for next average.
+                    prevInputs[channel][3] = delayedData[currentDelayInSamples-2] ;  
+                    prevInputs[channel][4] = samples[i];
+                    
+                }
+                
+                // Delay is the same
+                else{
+                    // INPUT
+                    // put current sample in the 'delay' position in the buffer
+                    delayedData[currentDelayInSamples]       = samples[i];
+                    
+                    // Save previous inputs for future interpolations
+                    prevInputs[channel][0] = prevInputs[channel][1];// 
+                    prevInputs[channel][1] = prevInputs[channel][2];// 
+                    prevInputs[channel][2] = prevInputs[channel][3];// 
+                    prevInputs[channel][3] = prevInputs[channel][4];// 
+                    prevInputs[channel][4] = samples[i];
+                }
+                
+                // OUTPUT, a position in the delayData buffer
+                samples[i]                = delayedData[positionInCurrentBuffer[channel]];
+                
+                // increase position in delay buffer for output, this only go around the buffer
+                positionInCurrentBuffer[channel]++;
+                if(positionInCurrentBuffer[channel] > 1023)
+                {   // reset off limits
+                    positionInCurrentBuffer[channel]= 0;
+                }
+            
+            }
+             
         }
         
-    }       
+    }
 
 }
+
 
 //==============================================================================
 bool TruePan_0_01AudioProcessor::hasEditor() const
