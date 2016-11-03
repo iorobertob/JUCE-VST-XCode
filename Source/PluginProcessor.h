@@ -21,8 +21,12 @@
 //==============================================================================
 /**
 */
+<<<<<<< HEAD
 class TruePan2AudioProcessor  : public AudioProcessor,
                                 public AudioProcessorValueTreeState::Listener
+=======
+class TruePan2AudioProcessor  : public AudioProcessor
+>>>>>>> master
 {
 public:
 
@@ -59,8 +63,11 @@ public:
     // Placeholder for Sample Rate 
     float mSampleRate;
     
+<<<<<<< HEAD
     AudioProcessorValueTreeState parameters;// Store values through sessions 
     
+=======
+>>>>>>> master
     ///////// I / O Patterns ///////////////////////////////////////////////////////
     
     //==============================================================================
@@ -99,22 +106,29 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+<<<<<<< HEAD
     
     //=====================================   I   /    O====================================
     void parameterChanged(const String& id, float newValue)override;
     //=====================================   I   /    O====================================
     
+=======
+>>>>>>> master
 
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TruePan2AudioProcessor)
     
     // I/O //////////////////////////////// I/O //////////////////////////////
+<<<<<<< HEAD
     
     AudioSampleBuffer delayBuffer_;         // Handle the Audio delayed data. Dedicated buffer
     AudioSampleBuffer tempSwapBuffer;       // To swap channels
     TruePan truePanInProcessor;             // Instance of the delay computation class
     
+=======
+    AudioSampleBuffer delayBuffer_;
+>>>>>>> master
     // I/O //////////////////////////////// I/O //////////////////////////////
 };
 

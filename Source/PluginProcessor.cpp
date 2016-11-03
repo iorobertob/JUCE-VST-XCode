@@ -13,6 +13,7 @@
 
 
 //==============================================================================
+<<<<<<< HEAD
 // Base initializer for the constructor with parameters
 TruePan2AudioProcessor::TruePan2AudioProcessor(): parameters(*this, nullptr)
 {
@@ -72,6 +73,10 @@ TruePan2AudioProcessor::TruePan2AudioProcessor(): parameters(*this, nullptr)
     // Initialising the ValueTree object    
     parameters.state = ValueTree(Identifier ("APVTSTruePan"));
        
+=======
+TruePan2AudioProcessor::TruePan2AudioProcessor()
+{
+>>>>>>> master
 }
 
 TruePan2AudioProcessor::~TruePan2AudioProcessor()
@@ -79,6 +84,7 @@ TruePan2AudioProcessor::~TruePan2AudioProcessor()
 }
 
 //==============================================================================
+<<<<<<< HEAD
 
 
 //=====================================   I   /    O====================================
@@ -106,6 +112,8 @@ void TruePan2AudioProcessor::parameterChanged(const String& id, float newValue){
 }
 //=====================================   I   /    O====================================
 
+=======
+>>>>>>> master
 const String TruePan2AudioProcessor::getName() const
 {
     return JucePlugin_Name;
@@ -168,6 +176,7 @@ void TruePan2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     // Based on Audio Effects - Reiss
     delayBuffer_.setSize(2, 1024);
     delayBuffer_.clear ();
+<<<<<<< HEAD
     
     tempSwapBuffer.setSize(1,1024);
     tempSwapBuffer.clear();
@@ -175,6 +184,8 @@ void TruePan2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     // Initialise gain and phase parameters
     const float phase   = *parameters.getRawParameterValue("invertPhase") < 0.5f ? 1.0f : -1.0f;
     previousGain        = *parameters.getRawParameterValue("gain") * phase;
+=======
+>>>>>>> master
 }
 
 void TruePan2AudioProcessor::releaseResources()
@@ -210,7 +221,10 @@ bool TruePan2AudioProcessor::setPreferredBusArrangement (bool isInput, int bus, 
 
 void TruePan2AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
+<<<<<<< HEAD
     
+=======
+>>>>>>> master
     const int numberOfChannels =  getTotalNumInputChannels();
     
     // Get values from the State Tree parameters 
@@ -365,7 +379,11 @@ AudioProcessorEditor* TruePan2AudioProcessor::createEditor()
 }
 
 //==============================================================================
+<<<<<<< HEAD
 void TruePan2AudioProcessor::getStateInformation (MemoryBlock& destData)  
+=======
+void TruePan2AudioProcessor::getStateInformation (MemoryBlock& destData)
+>>>>>>> master
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes

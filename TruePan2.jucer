@@ -7,8 +7,13 @@
               pluginManufacturerCode="TP02" pluginCode="TP02" pluginChannelConfigs="{2,2}"
               pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="TruePan2AU"
+<<<<<<< HEAD
               pluginRTASCategory="" aaxIdentifier="com.iopatterns.TruePan2"
               pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.0"
+=======
+              pluginRTASCategory="" aaxIdentifier="com.yourcompany.TruePan2"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.4"
+>>>>>>> master
               companyName="IO Patterns" companyWebsite="iopatterns.com" companyEmail="info@iopatterns.com">
   <MAINGROUP id="p9MFqJ" name="TruePan2">
     <GROUP id="{11FB0FC9-F635-08CC-5A24-2ABCE7B2751F}" name="Source">

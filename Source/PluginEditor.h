@@ -42,7 +42,12 @@
                                                                     //[/Comments]
 */
 class TruePan2AudioProcessorEditor  : public AudioProcessorEditor,
+<<<<<<< HEAD
                                       public Timer
+=======
+                                      public Timer,
+                                      public SliderListener
+>>>>>>> master
 {
 public:
     //==============================================================================
@@ -54,6 +59,7 @@ public:
     void timerCallback() override;
     TruePan2AudioProcessor* getProcessor() const
         {return static_cast <TruePan2AudioProcessor*>(getAudioProcessor());}
+<<<<<<< HEAD
 
     // Define types to use and attach GUI components to parameters in the Value Tree
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
@@ -63,6 +69,8 @@ public:
     void sliderDragEnded   (Slider* slider) ;//override;
 
     void handlePositionChange(Slider* sliderThatWasMoved, float knobPosition);
+=======
+>>>>>>> master
     //[/UserMethods]
 
     void paint (Graphics& g) override;

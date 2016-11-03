@@ -341,7 +341,11 @@
  #define JucePlugin_RTASDisableMultiMono   0
 #endif
 #ifndef  JucePlugin_AAXIdentifier
+<<<<<<< HEAD
  #define JucePlugin_AAXIdentifier          com.iopatterns.TruePan2
+=======
+ #define JucePlugin_AAXIdentifier          com.yourcompany.TruePan2
+>>>>>>> master
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode
