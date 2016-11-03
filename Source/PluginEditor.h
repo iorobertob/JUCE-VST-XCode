@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Projucer version: 4.2.4
+  Created with Projucer version: 4.3.0
 
   ------------------------------------------------------------------------------
 
@@ -17,17 +17,18 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_ED2E81A60680C205__
-#define __JUCE_HEADER_ED2E81A60680C205__
+#ifndef __JUCE_HEADER_C6909893470D428__
+#define __JUCE_HEADER_C6909893470D428__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "JuceHeader.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-/////////////////
+
 /////  I/O  / ///
 #include "TruePan.h"
 #include "AltLookAndFeel.h"
 ////////////////
+
 //[/Headers]
 
 
@@ -35,53 +36,69 @@
 //==============================================================================
 /**
                                                                     //[Comments]
-    An auto-generated component, created by the Introjucer.
+    An auto-generated component, created by the Projucer.
 
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class TruePan_0_01AudioProcessorEditor  : public AudioProcessorEditor,
-                                          public Timer,
-                                          public SliderListener
+class TruePan2AudioProcessorEditor  : public AudioProcessorEditor,
+                                      public Timer
 {
 public:
     //==============================================================================
-    TruePan_0_01AudioProcessorEditor (TruePan_0_01AudioProcessor& ownerFilter);
-    ~TruePan_0_01AudioProcessorEditor();
+    TruePan2AudioProcessorEditor (TruePan2AudioProcessor& ownerFilter);
+    ~TruePan2AudioProcessorEditor();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void timerCallback()override;
-    TruePan_0_01AudioProcessor* getProcessor() const
-        {return static_cast <TruePan_0_01AudioProcessor*>(getAudioProcessor());}
+    void timerCallback() override;
+    TruePan2AudioProcessor* getProcessor() const
+        {return static_cast <TruePan2AudioProcessor*>(getAudioProcessor());}
 
+    // Define types to use and attach GUI components to parameters in the Value Tree
+    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+
+    void sliderDragStarted (Slider* slider) ;//override;
+    void sliderDragEnded   (Slider* slider) ;//override;
+
+    void handlePositionChange(Slider* sliderThatWasMoved, float knobPosition);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDrag (const MouseEvent& e) override;
+    void mouseUp (const MouseEvent& e) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    TruePan mTruePan;
 
-    AltLookAndFeel altLookAndFeel; // [2]
+    AltLookAndFeel altLookAndFeel;                      // Instance of a new GUI interface look and feel clas
+
+    ScopedPointer<SliderAttachment> gainAttachment;
+    ScopedPointer<SliderAttachment> sliderAttachment;
+    ScopedPointer<ButtonAttachment> invertAttachment;
+
+    float startY;
+    float draggedPosition;
+    float startPosition;
+    float previousAngle;
+
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Slider> slider;
+    ScopedPointer<Slider> panSlider;
     ScopedPointer<Label> label;
-    ScopedPointer<Label> label2;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TruePan_0_01AudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TruePan2AudioProcessorEditor)
 };
 
 //[EndFile] You can add extra defines here...
-
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_ED2E81A60680C205__
+#endif   // __JUCE_HEADER_C6909893470D428__

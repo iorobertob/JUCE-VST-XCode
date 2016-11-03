@@ -15,36 +15,15 @@
 
 #include <iomanip>
 
-TruePan::TruePan(){SetWidth(1.0f);}
+TruePan::TruePan(){}
 TruePan::~TruePan(){}
 
-void TruePan::SetWidth(float width)
-{
-    m_width=width; 
-    float tmp;
-    if(1.0f+width>2.0f)
-        tmp=1.0f/(1.0f+m_width);
-     else
-        tmp=1.0f/2.0f;
-        
-    diffGain=m_width*tmp;
-    sumGain=tmp; 
-}
 
-void TruePan::ClockProcess(float* LeftSample, float* RightSample)
-{
-    float m = sumGain*(*LeftSample+*RightSample);
-    float s = diffGain*
-    (*RightSample-*LeftSample);
-    *LeftSample =m-s;
-    *RightSample=m+s;
-}
-
-
-void TruePan::ComputeDelay(float pos, float SR)
+void TruePan::ComputeDelay(float pos, float SR, float lowRange, float highRange)
 {
     // Convert to radians.
-    pos = (((pos/256)*180)-180)/180*M_PI;
+    //pos = (((pos/(highRange-lowRange))*180)-180)/180*M_PI;
+    pos = ((pos-90) / 180) * M_PI;
     
     //TODO:These values must be defined prior to this. Only for test defined here
     float radious = 1.0;//TODO: Abstract if necessary
@@ -80,8 +59,4 @@ void TruePan::ComputeDelay(float pos, float SR)
         nSamples[0] = 0;
     }
     
-    //pointer = nSamples;
-    printf("position %f \n", pos);
-    printf("nsamples 0 %d \n", nSamples[0]);
-    printf("nsamples 1 %d \n", nSamples[1]);
 }
