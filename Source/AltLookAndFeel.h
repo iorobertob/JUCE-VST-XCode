@@ -24,7 +24,11 @@ public:
     void drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
                            const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider) override
     {
-        g.setColour (Colours::darkblue);
+        //g.setColour (Colours::darkblue);
+        
+        ColourGradient* grad = new ColourGradient::ColourGradient(Colours::black, 125,140,Colours::grey, 0,0, true);
+        
+        g.setGradientFill(*grad);
         
         static const unsigned char pathData[] = { 110,109,117,19,123,67,203,161,84,67,98,117,19,123,67,18,131,129,67,238,92,67,67,182,179,166,67,117,19,39,67,230,80,148,67,98,193,202,6,67,188,169,126,67,234,38,166,66,19,131,129,67,234,38,166,66,204,161,84,67,98,234,38,166,66,114,61,38,67,47,29,6,67,
             26,36,43,67,117,19,39,67,204,161,0,67,98,6,129,67,67,164,240,183,66,117,19,123,67,113,61,38,67,117,19,123,67,203,161,84,67,99,109,45,114,228,66,193,170,80,67,98,131,64,228,66,220,249,81,67,108,39,228,66,74,76,83,67,108,39,228,66,203,161,84,67,98,108,
@@ -34,7 +38,7 @@ public:
         Path path;
         path.loadPathFromData (pathData, sizeof (pathData));
         
-        path.setUsingNonZeroWinding(false);
+        path.setUsingNonZeroWinding(false); // From ADC 2015 conference given by Jules
         
         path.applyTransform (AffineTransform::translation (-50, -70));      // Move to Center of VST GUI
         path.applyTransform (AffineTransform::translation (-117, -143));    // Move to 0,0

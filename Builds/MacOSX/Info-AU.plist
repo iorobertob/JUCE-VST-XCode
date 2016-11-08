@@ -10,17 +10,17 @@
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleName</key>
-    <string>TruePan2</string>
+    <string>TruePan</string>
     <key>CFBundleDisplayName</key>
-    <string>TruePan2</string>
+    <string>TruePan</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>0.0.3</string>
     <key>CFBundleVersion</key>
-    <string>1.0.0</string>
+    <string>0.0.3</string>
     <key>NSHumanReadableCopyright</key>
     <string>IO Patterns</string>
     <key>NSHighResolutionCapable</key>
@@ -29,19 +29,19 @@
     <array>
       <dict>
         <key>name</key>
-        <string>IO Patterns: TruePan2</string>
+        <string>IO Patterns: TruePan</string>
         <key>description</key>
-        <string>TruePan2</string>
+        <string>TruePan</string>
         <key>factoryFunction</key>
-        <string>TruePan2AUFactory</string>
+        <string>TruePanAUFactory</string>
         <key>manufacturer</key>
-        <string>TP02</string>
+        <string>TP03</string>
         <key>type</key>
         <string>aufx</string>
         <key>subtype</key>
-        <string>TP02</string>
+        <string>TP03</string>
         <key>version</key>
-        <integer>65536</integer>
+        <integer>3</integer>
       </dict>
     </array>
   </dict>
