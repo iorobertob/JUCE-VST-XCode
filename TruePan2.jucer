@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="o4uCSL" name="TruePan2" projectType="audioplug" version="1.0.0"
-              bundleIdentifier="com.iopatterns.TruePan2" includeBinaryInAppConfig="1"
+<JUCERPROJECT id="o4uCSL" name="TruePan" projectType="audioplug" version="0.0.3"
+              bundleIdentifier="com.iopatterns.TruePan" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="1" buildAU="1" buildAUv3="0" buildRTAS="0"
-              buildAAX="0" pluginName="TruePan2" pluginDesc="TruePan2" pluginManufacturer="IO Patterns"
-              pluginManufacturerCode="TP02" pluginCode="TP02" pluginChannelConfigs="{2,2}"
+              buildAAX="0" pluginName="TruePan" pluginDesc="TruePan" pluginManufacturer="IO Patterns"
+              pluginManufacturerCode="TP03" pluginCode="TP03" pluginChannelConfigs="{2,2}"
               pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
-              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="TruePan2AU"
+              pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="TruePanAU"
               pluginRTASCategory="" aaxIdentifier="com.iopatterns.TruePan2"
               pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.0"
               companyName="IO Patterns" companyWebsite="iopatterns.com" companyEmail="info@iopatterns.com">
-  <MAINGROUP id="p9MFqJ" name="TruePan2">
+  <MAINGROUP id="p9MFqJ" name="TruePan">
     <GROUP id="{11FB0FC9-F635-08CC-5A24-2ABCE7B2751F}" name="Source">
       <FILE id="qZVCrC" name="AltLookAndFeel.h" compile="0" resource="0"
             file="Source/AltLookAndFeel.h"/>
@@ -28,10 +28,10 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="3" targetName="TruePan2"
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="3" targetName="TruePan"
                        headerPath="..\..\Source\TruePanPlugin;" osxSDK="default" osxCompatibility="10.9 SDK"
                        osxArchitecture="64BitIntel"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="TruePan2"
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="TruePan"
                        headerPath="..\..\Source\TruePanPlugin;" osxSDK="default" osxCompatibility="10.9 SDK"
                        osxArchitecture="64BitIntel"/>
       </CONFIGURATIONS>
