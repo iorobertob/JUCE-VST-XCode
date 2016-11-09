@@ -59,6 +59,15 @@ public:
     // Placeholder for Sample Rate 
     float mSampleRate;
     
+    
+    // Initialise values for the process block
+    int numberOfChannels;
+    
+    // Get values from the State Tree parameters 
+    float phase;
+    float swapChannel;
+    float currentGain ;
+    
     AudioProcessorValueTreeState parameters;// Store values through sessions 
     
     ///////// I / O Patterns ///////////////////////////////////////////////////////

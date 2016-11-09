@@ -211,12 +211,12 @@ bool TruePan2AudioProcessor::setPreferredBusArrangement (bool isInput, int bus, 
 void TruePan2AudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     
-    const int numberOfChannels =  getTotalNumInputChannels();
+    numberOfChannels =  getTotalNumInputChannels();
     
     // Get values from the State Tree parameters 
-    const float phase       = *parameters.getRawParameterValue ("invertPhase") < 0.5f ? 1.0f : -1.0f;
-    const float swapChannel = *parameters.getRawParameterValue ("swapChannel") < 0.5f ? 0.0f : 1.0f;
-    const float currentGain = *parameters.getRawParameterValue ("gain") * phase;
+    phase       = *parameters.getRawParameterValue ("invertPhase") < 0.5f ? 1.0f : -1.0f;
+    swapChannel = *parameters.getRawParameterValue ("swapChannel") < 0.5f ? 0.0f : 1.0f;
+    currentGain = *parameters.getRawParameterValue ("gain") * phase;
     
     if (numberOfChannels == 2)
     {
