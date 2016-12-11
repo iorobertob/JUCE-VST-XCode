@@ -91,6 +91,7 @@ private:
 
     //==============================================================================
     ScopedPointer<Slider> panSlider;
+    ScopedPointer<Label> label2;
     ScopedPointer<Label> label;
 
 

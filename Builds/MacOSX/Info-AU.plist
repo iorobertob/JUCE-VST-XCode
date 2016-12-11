@@ -10,9 +10,9 @@
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleName</key>
-    <string>TruePan</string>
+    <string>DemoPlugin</string>
     <key>CFBundleDisplayName</key>
-    <string>TruePan</string>
+    <string>DemoPlugin</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
@@ -29,9 +29,9 @@
     <array>
       <dict>
         <key>name</key>
-        <string>IO Patterns: TruePan</string>
+        <string>IO Patterns: DemoPlugin</string>
         <key>description</key>
-        <string>TruePan</string>
+        <string>DemoPlugin</string>
         <key>factoryFunction</key>
         <string>TruePanAUFactory</string>
         <key>manufacturer</key>

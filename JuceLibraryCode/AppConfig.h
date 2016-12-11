@@ -257,10 +257,10 @@
  #define JucePlugin_Build_STANDALONE       0
 #endif
 #ifndef  JucePlugin_Name
- #define JucePlugin_Name                   "TruePan"
+ #define JucePlugin_Name                   "DemoPlugin"
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "TruePan"
+ #define JucePlugin_Desc                   "DemoPlugin"
 #endif
 #ifndef  JucePlugin_Manufacturer
  #define JucePlugin_Manufacturer           "IO Patterns"
@@ -341,7 +341,7 @@
  #define JucePlugin_RTASDisableMultiMono   0
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.iopatterns.TruePan2
+ #define JucePlugin_AAXIdentifier          com.iopatterns.dmoPlugin
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode

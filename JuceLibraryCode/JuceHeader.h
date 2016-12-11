@@ -41,7 +41,7 @@
 #if ! JUCE_DONT_DECLARE_PROJECTINFO
 namespace ProjectInfo
 {
-    const char* const  projectName    = "TruePan";
+    const char* const  projectName    = "DemoPlugin";
     const char* const  versionString  = "0.0.3";
     const int          versionNumber  = 0x3;
 }

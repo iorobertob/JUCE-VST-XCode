@@ -44,6 +44,16 @@ TruePan2AudioProcessorEditor::TruePan2AudioProcessorEditor (TruePan2AudioProcess
     panSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00008b));
     panSlider->setColour (Slider::rotarySliderOutlineColourId, Colour (0x66850808));
 
+    addAndMakeVisible (label2 = new Label ("new label",
+                                           TRANS("D    E    M    O\n"
+                                           "I/O PATTERNS")));
+    label2->setFont (Font (26.10f, Font::plain));
+    label2->setJustificationType (Justification::centredLeft);
+    label2->setEditable (false, false, false);
+    label2->setColour (Label::textColourId, Colour (0xb0ffffff));
+    label2->setColour (TextEditor::textColourId, Colours::black);
+    label2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
     addAndMakeVisible (label = new Label ("new label",
                                           TRANS("0.0")));
     label->setFont (Font (15.00f, Font::plain));
@@ -73,6 +83,7 @@ TruePan2AudioProcessorEditor::~TruePan2AudioProcessorEditor()
     //[/Destructor_pre]
 
     panSlider = nullptr;
+    label2 = nullptr;
     label = nullptr;
 
 
@@ -98,6 +109,7 @@ void TruePan2AudioProcessorEditor::resized()
     //[/UserPreResize]
 
     panSlider->setBounds (0, 0, 250, 260);
+    label2->setBounds (40, 8, 184, 96);
     label->setBounds (104, 240, 40, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
@@ -194,6 +206,11 @@ BEGIN_JUCER_METADATA
           max="256" int="0.10000000000000000555" style="Rotary" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"
           needsCallback="0"/>
+  <LABEL name="new label" id="3a4ff1d8423a4c10" memberName="label2" virtualName=""
+         explicitFocusOrder="0" pos="40 8 184 96" textCol="b0ffffff" edTextCol="ff000000"
+         edBkgCol="0" labelText="D    E    M    O&#10;I/O PATTERNS" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="26.100000000000001421" bold="0" italic="0" justification="33"/>
   <LABEL name="new label" id="972994439b8f37cd" memberName="label" virtualName=""
          explicitFocusOrder="0" pos="104 240 40 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="0.0" editableSingleClick="0"

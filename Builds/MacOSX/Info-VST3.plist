@@ -10,9 +10,9 @@
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleName</key>
-    <string>TruePan</string>
+    <string>DemoPlugin</string>
     <key>CFBundleDisplayName</key>
-    <string>TruePan</string>
+    <string>DemoPlugin</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
